@@ -306,3 +306,38 @@ body{
 .infoCard .currentTrack::-webkit-scrollbar-thumb {
     background: antiqueWhite; /* Scrollbar handle color */
 }
+
+/* recently played */
+
+
+.recentTrack{
+    display: flex;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 30%;
+    background-color: coral;
+    border-radius: 15px;
+    height: 100px;
+    padding: 10px;
+
+    border: 2px solid antiqueWhite;
+    box-shadow: 5px 5px 5px coral;
+}
+
+.recentTrack h3{
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.recentTrack h4{
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.recentCover{
+    height: 100%;
+    margin-right: 10px;
+    aspect-ratio: 1/1;
+    border-radius: 15px;
+}

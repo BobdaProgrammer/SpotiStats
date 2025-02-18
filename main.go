@@ -67,7 +67,7 @@ func main(){
 
 
     goth.UseProviders(
-        spotify.New(CLIENT_ID, CLIENT_SECRET, "http://localhost:8080/auth/spotify/callback", "user-read-currently-playing", "user-modify-playback-state", "user-read-playback-state", "user-top-read"),
+        spotify.New(CLIENT_ID, CLIENT_SECRET, "http://localhost:8080/auth/spotify/callback", "user-read-currently-playing", "user-modify-playback-state", "user-read-playback-state", "user-top-read", "user-read-recently-played"),
     )
 
     e.GET("/refreshToken", func(c echo.Context) error{
@@ -91,6 +91,10 @@ func main(){
         // Stream Spotify's response directly to the client
         return c.Stream(resp.StatusCode, "application/json", resp.Body)
 
+    })
+
+    e.GET("/recents", func(c echo.Context) error{
+        return c.Render(http.StatusOK, "recent.html", nil) 
     })
 
     e.GET("/", func(c echo.Context) error{
