@@ -1,0 +1,66 @@
+
+.icon {
+    margin-top: 5px;
+    position: relative;
+    display: inline-flex;
+    justify-content: space-between;
+    width: 50px;
+    height: 50px;
+
+    span {
+        width: 8px;
+        height: 100%;
+        background-color: orange;
+        border-radius: 8px;
+        transform-origin: bottom;
+        animation: bounce 2.2s ease infinite alternate;
+        content: '';
+        margin-right:2px
+    }
+}
+
+@keyframes bounce {
+  10% {
+    transform: scaleY(0.3); /* start by scaling to 30% */
+  }
+
+  30% {
+    transform: scaleY(1); /* scale up to 100% */
+  }
+
+  60% {
+    transform: scaleY(0.5); /* scale down to 50% */
+  }
+
+  80% {
+    transform: scaleY(0.75); /* scale up to 75% */
+  }
+
+  100% {
+    transform: scaleY(0.6); /* scale down to 60% */
+  }
+}
+
+
+
+
+
+
+span {
+  &:nth-of-type(2) {
+    animation-delay: -2.2s; /* Start at the end of animation */
+  }
+
+  &:nth-of-type(3) {
+    animation-delay: -3.7s; /* Start mid-way of return of animation */
+  }
+  &:nth-of-type(4) {
+    animation-delay: -3.2s; /* Start mid-way of return of animation */
+  }
+  &:nth-of-type(5) {
+    animation-delay: -2.8s; /* Start mid-way of return of animation */
+  }
+  &:nth-of-type(6) {
+    animation-delay: -4.3s; /* Start mid-way of return of animation */
+  }
+}

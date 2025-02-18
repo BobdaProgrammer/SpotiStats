@@ -7,19 +7,24 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Fascinate+Inline&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/404.css">
 </head>
 <body>
-    <h1>Authorise with spotify</h1>
-    <form action="/auth/spotify">
-        <button type="submit" class="authButton">
-            Authorise! 
-            <img src="/static/Spotify_icon.png" class="icon" alt="Spotify">
+    <h1>404 page not found :(</h1>
+    <div class="icon">
+        <span> </span>
+        <span> </span>
+        <span> </span>
+        <span> </span>
+        <span> </span>
+        <span> </span>
+
+    </div>
+    <form action="/">
+        <button type="submit" class="authButton" style="margin-top: 0px;">
+            Home 
         </button>
     </form>
-    <script>
-        if(localStorage.getItem("refresh_token")!=null&&localStorage.getItem("client_id")!=null){
-            window.location.href = "/playing"
-        }
-    </script>
+
 </body>
 </html>

@@ -42,7 +42,19 @@ func main(){
     e.Use(
         session.Middleware(store),
     )
-    
+   
+    e.HTTPErrorHandler = func(err error, c echo.Context) {
+        code := http.StatusInternalServerError
+        if he, ok := err.(*echo.HTTPError); ok{
+            code = he.Code
+        }
+
+        if code == http.StatusNotFound{
+            c.Render(http.StatusOK, "404.html", nil)
+            return
+        }
+    }
+
     e.Static("/static", "static")
 
     t := &Template{
@@ -79,7 +91,7 @@ func main(){
         // Stream Spotify's response directly to the client
         return c.Stream(resp.StatusCode, "application/json", resp.Body)
 
-})
+    })
 
     e.GET("/", func(c echo.Context) error{
         return c.Render(http.StatusOK, "home.html", nil)
