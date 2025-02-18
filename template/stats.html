@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="lang">
+<head>
+    <meta charset="charset">
+    <title>Spotify currently playing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Fascinate+Inline&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="switcher">    
+        <form action="/playing" class="switchForm">
+            <button type="submit" class="switcherButton">
+                Playing
+                <div class="underliner"></div>
+            </button>
+        </form>
+        <form action="/stats" class="switchForm">
+            <button type="submit" class="switcherButton">
+                Stats
+                <div class="underliner"></div>
+            </button>
+        </form>
+    </div>
+    <div class="statSelector">
+        <div class="timeFrames selectorLine">
+            <button class="selectorButtonTime active" id="4weeks">4 weeks</button>
+            <button class="selectorButtonTime" id="6months">6 months</button>
+            <button class="selectorButtonTime" id="1year">1 year</button>
+        </div>
+        <div class="favouriteWhat selectorLine">
+            <button class="selectorButton" id="tracksSelect">Tracks</button>
+            <button class="selectorButton" id="artistsSelect">Artists</button>
+            <button class="selectorButton" id="albumsSelect">Albums</button>
+            <button class="selectorButton" id="genresSelect">Genres</button>
+        </div>
+    </div>
+    <div id="statList"></div>
+
+    <div class="pageTaker">
+        <div class="infoCard" id="infoCard"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/fast-average-color"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/javascript/stats.js"></script>
+</body>
+</html>

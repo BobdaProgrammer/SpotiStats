@@ -9,8 +9,22 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+    <div class="switcher">    
+        <form action="/playing" class="switchForm">
+            <button type="submit" class="switcherButton">
+                Playing
+                <div class="underliner"></div>
+            </button>
+        </form>
+        <form action="/stats" class="switchForm">
+            <button type="submit" class="switcherButton">
+                Stats
+                <div class="underliner"></div>
+            </button>
+        </form>
+    </div>
     <div id="player" class="player">
-        <img class="cover" id="cover" src="/static/Spotify_icon.png">
+        <img class="cover" id="cover" src="/static/Spotify_icon.png"crossorigin="anonymous">
         <div class="currentTrack">
             <h4 class="trackTitle" id="trackTitle">Track</h4>
             <h5 class="artist" id="artist">Artist</h5>
@@ -42,7 +56,7 @@
         </div>
     </div>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/fast-average-color"></script>
     <script src="/static/javascript/player.js"></script>
 </body>
 </html>

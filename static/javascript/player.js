@@ -1,8 +1,28 @@
+//import { RefreshrefreshToken } from "./utils.js"
+
 let params = new URLSearchParams(document.location.search)
 let accessToken = params.get("access_token")
+console.log(accessToken, localStorage.getItem("access_token"))
+if(accessToken==null){
+    accessToken = localStorage.getItem("access_token")
+}
 let refreshToken = params.get("refresh_token")
+console.log(refreshToken, localStorage.getItem("refresh_token"))
+if(refreshToken==null){
+    refreshToken = localStorage.getItem("refresh_token")
+}
+console.log("accessToken = "+accessToken)
+localStorage.setItem("access_token", accessToken)
+localStorage.setItem("refresh_token", refreshToken)
 let clientId = params.get("client_id")
+console.log(clientId, localStorage.getItem("client_id"))
+if(clientId==null){
+    clientId = localStorage.getItem("client_id")
+}
+localStorage.setItem("client_id", clientId)
 let playing = true;
+
+
 
 const playPauseButton = document.getElementById("playPauseButton")
 const prevButton = document.getElementById("prevButton")
@@ -42,28 +62,7 @@ function SetPlayPauseButtonState(){
     }
 }
 
-async function RefreshrefreshToken(){
-    const url = "https://accounts.spotify.com/api/token";
 
-    const payload = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: new URLSearchParams({
-        grant_type: 'refresh_token',
-        refresh_token: refreshToken,
-        client_id: clientId
-      }),
-    }
-    const body = await fetch(url, payload);
-    const response = await body.json();
-
-    accessToken = response.accessToken;
-    if (response.refreshToken) {
-        refreshToken = response.refreshToken;
-    }
-}
 
 async function getPlaying(){
     const url = "https://api.spotify.com/v1/me/player/currently-playing"
@@ -87,6 +86,35 @@ async function getPlaying(){
     }
 }
 
+async function RefreshrefreshToken(){
+    const url = "https://accounts.spotify.com/api/token";
+
+    const payload = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+    body: new URLSearchParams({
+        grant_type: 'refresh_token',
+        refresh_token: localStorage.getItem("refresh_token"),
+        client_id: clientId
+      }),
+    }
+    const body = await fetch(url, payload);
+    const response = await body.json();
+
+    if(response.accessToken){
+        let accessToken = response.accessToken;
+        console.log("accessToken = "+accessToken)
+
+        localStorage.setItem("access_token", accessToken)
+    }
+    if (response.refreshToken) {
+        let refreshToken = response.refreshToken;
+        localStorage.setItem("refresh_token", refreshToken)
+    }
+}
+
 function extractData(json){
     const item = json.item
 
@@ -98,7 +126,16 @@ function extractData(json){
     document.getElementById("artist").textContent = artist
 
     const cover = item.album.images[0].url
+
     document.getElementById("cover").src = cover
+    let img = document.getElementById("cover")
+    const fac = new FastAverageColor();
+
+    fac.getColorAsync(img).then(color => {
+        console.log(color.rgba)
+        img.style.boxShadow = `0px 0px 10px 5px ${color.rgba}`;
+    });
+
 
 
     const length = item.duration_ms / 1000

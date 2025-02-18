@@ -54,7 +54,7 @@ func main(){
 
 
     goth.UseProviders(
-        spotify.New(CLIENT_ID, CLIENT_SECRET, "http://localhost:8080/auth/spotify/callback", "user-read-currently-playing", "user-modify-playback-state", "user-read-playback-state"),
+        spotify.New(CLIENT_ID, CLIENT_SECRET, "http://localhost:8080/auth/spotify/callback", "user-read-currently-playing", "user-modify-playback-state", "user-read-playback-state", "user-top-read"),
     )
 
     e.GET("/", func(c echo.Context) error{
@@ -63,6 +63,10 @@ func main(){
 
     e.GET("/playing", func(c echo.Context) error{
         return c.Render(http.StatusOK, "player.html", nil)
+    })
+
+    e.GET("/stats", func(c echo.Context) error{
+        return c.Render(http.StatusOK, "stats.html", nil) 
     })
 
     e.GET("/auth/:provider", func(c echo.Context) error{

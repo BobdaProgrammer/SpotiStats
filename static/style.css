@@ -5,6 +5,14 @@ body{
 }
 
 
+/* phone styles */
+@media only screen and (max-width: 786px){
+    .player{
+        width: 85%;
+    }
+}
+
+
 /* auth page */
 .icon{
     max-width: 30px;
@@ -114,12 +122,187 @@ body{
     margin-bottom: 5px;
 }
 
+/* stats page */
 
-/* phone styles */
-@media only screen and (max-width: 786px){
-    .player{
-        width: 85%;
-    }
+.switcherButton{
+    margin-left: 5vw;
+    margin-right: 5vw;
+    border: none;
+    outline: none;
+    color: coral;
+    background: none;
+    font-size: 125%;
+    text-align: center;
+}
+
+.underliner{
+    margin-top: 1px;
+    background-color: coral;
+    width: 0%;
+    margin: auto;
+    height: 4px;
+    border-radius: 2px;
+    transition: 0.25s ease;
+}
+
+.switcherButton:hover .underliner{
+    width:100%
 }
 
 
+.switcher{
+    text-align: center;
+    margin:auto;
+    display: inline-flex;
+}
+
+.statSelector{
+    margin: auto;
+
+    margin-top: 20px;
+    width: 95%;
+    padding: 10px;
+    background-color:coral;
+    border-radius: 10px;
+}
+
+.favouriteWhat{
+    margin-top: 7px;
+}
+
+.selectorLine{
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.selectorButton, .selectorButtonTime{
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    background-color: Crimson;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 2px 2px antiqueWhite;
+    transition: border 0.1s ease;
+}
+
+.selectorButton.active, .selectorButtonTime.active{
+    transform: translate(2px, 2px);
+    box-shadow: none;
+    border: 2px solid antiqueWhite;
+}
+
+
+#statList {
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px; /* Adjust spacing between items */
+    margin-top: 20px;
+    width: 94%;
+    padding: 15px;
+    background-color: coral;
+    border-radius: 10px;
+}
+
+.stat {
+    padding: 5px;
+    overflow: hidden;
+    width: 100%;
+    transition: transform 0.5s ease;
+    position: relative; /* Ensures the item stays in place when expanded */
+    background-color: coral;
+    border-radius: 15px;
+}
+
+.stat * {
+    width: 100%;
+}
+
+.statCover {
+    transition: 0.5s ease;
+    box-shadow: none;
+    border-radius: 15px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+.stat:hover {
+    transform: scale(1.05); /* This expands the stat */
+    z-index: 1; /* Makes sure the hovered stat appears above others */
+}
+
+.hidden{
+    display: none;
+}
+
+.infoCard{
+    pointer-events: auto;
+    background-color: coral;
+    border-radius: 20px;
+    margin: auto; /* 15% from the top and centered */
+    padding: 1%;
+    position: relative;
+    width: 40%; /* Could be more or less, depending on screen size */
+    text-align: left;
+    display: flex;
+    aspect-ratio:2/1;
+    font-size: clamp(1px, 2vw, 16px);
+}
+
+.infoCard img{
+    aspect-ratio: 1/1;
+    height:100%;
+    border-radius: 15px;
+    margin-right: 15px;
+}
+
+.infoCard button{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    outline: none;
+    border: none;
+}
+
+.infoCard .currentTrack{
+    height:100%;
+    display:flex;
+    overflow: auto;
+    flex-direction: column;
+    justify-content: space-between; /* Even spacing */
+    scrollbar-color: anitiqueWhite;
+}
+
+.infoCard svg{
+    transition: 0.3s ease;
+}
+
+.infoCard svg:hover{
+    fill: white;
+    transform: rotate(20deg); /* Rotates 180 degrees on hover */
+}
+
+.pageTaker{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 9999; /* Ensures it's on top of other content */
+    display: none;
+    transition: opacity 0.3s ease;
+}
+
+.infoCard .currentTrack::-webkit-scrollbar-track {
+    background: none; /* Track color */
+}
+
+.infoCard .currentTrack::-webkit-scrollbar-thumb {
+    background: antiqueWhite; /* Scrollbar handle color */
+}
