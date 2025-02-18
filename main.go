@@ -15,6 +15,7 @@ import (
 	"github.com/labstack/echo-contrib/session"
 	//"github.com/labstack/echo/v4/middleware"
 	"log/slog"
+    "net/url"
 	"github.com/joho/godotenv"
     "github.com/gorilla/sessions"
 )
@@ -56,6 +57,29 @@ func main(){
     goth.UseProviders(
         spotify.New(CLIENT_ID, CLIENT_SECRET, "http://localhost:8080/auth/spotify/callback", "user-read-currently-playing", "user-modify-playback-state", "user-read-playback-state", "user-top-read"),
     )
+
+    e.GET("/refreshToken", func(c echo.Context) error{
+        refreshToken := c.FormValue("refresh_token")
+        if refreshToken == "" {
+            return c.JSON(http.StatusBadRequest, map[string]string{"error": "Missing refresh_token"})
+        }
+
+        // Make the POST request to Spotify
+        resp, err := http.PostForm("https://accounts.spotify.com/api/token", url.Values{
+        "grant_type":    {"refresh_token"},
+        "refresh_token": {refreshToken},
+        "client_id":     {CLIENT_ID},
+        "client_secret": {CLIENT_SECRET},
+        })
+        if err != nil {
+            return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to send request"})
+        }
+        defer resp.Body.Close()
+
+        // Stream Spotify's response directly to the client
+        return c.Stream(resp.StatusCode, "application/json", resp.Body)
+
+})
 
     e.GET("/", func(c echo.Context) error{
         return c.Render(http.StatusOK, "home.html", nil)

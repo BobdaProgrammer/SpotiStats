@@ -87,30 +87,22 @@ async function getPlaying(){
 }
 
 async function RefreshrefreshToken(){
-    const url = "https://accounts.spotify.com/api/token";
-
+    const url = "/refreshToken?refresh_token="+localStorage.getItem("refresh_token")
+    
     const payload = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-    body: new URLSearchParams({
-        grant_type: 'refresh_token',
-        refresh_token: localStorage.getItem("refresh_token"),
-        client_id: clientId
-      }),
+      method: 'GET',
     }
     const body = await fetch(url, payload);
     const response = await body.json();
 
-    if(response.accessToken){
-        let accessToken = response.accessToken;
+    if(response.access_token){
+        let accessToken = response.access_token;
         console.log("accessToken = "+accessToken)
 
         localStorage.setItem("access_token", accessToken)
     }
-    if (response.refreshToken) {
-        let refreshToken = response.refreshToken;
+    if (response.refresh_token) {
+        let refreshToken = response.refresh_token;
         localStorage.setItem("refresh_token", refreshToken)
     }
 }
@@ -132,7 +124,6 @@ function extractData(json){
     const fac = new FastAverageColor();
 
     fac.getColorAsync(img).then(color => {
-        console.log(color.rgba)
         img.style.boxShadow = `0px 0px 10px 5px ${color.rgba}`;
     });
 
