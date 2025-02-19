@@ -8,6 +8,7 @@
 - [x] Queue
 - [x] Statistics
 - [x] Recently played
+- [ ] Make playlist of top tracks over a time frame
 - [ ] Share stats as image
 - [ ] nearby concerts based on taste
 
