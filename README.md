@@ -5,8 +5,12 @@
 
 ## Current Progress
 - [x] Currently playing
+- [x] Queue
 - [x] Statistics
-- [ ] nearby concerts
+- [x] Recently played
+- [ ] Make playlist of top tracks over a time frame
+- [ ] Share stats as image
+- [ ] nearby concerts based on taste
 
 ## Project overview
 ### Backend
