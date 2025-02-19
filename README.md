@@ -5,7 +5,9 @@
 
 ## Current Progress
 - [x] Currently playing
+- [x] Queue
 - [x] Statistics
+- [x] Recently played
 - [ ] nearby concerts
 
 ## Project overview
