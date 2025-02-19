@@ -2,31 +2,68 @@
 
 let params = new URLSearchParams(document.location.search)
 let accessToken = params.get("access_token")
-console.log(accessToken, localStorage.getItem("access_token"))
 if(accessToken==null){
     accessToken = localStorage.getItem("access_token")
 }
 let refreshToken = params.get("refresh_token")
-console.log(refreshToken, localStorage.getItem("refresh_token"))
 if(refreshToken==null){
     refreshToken = localStorage.getItem("refresh_token")
 }
-console.log("accessToken = "+accessToken)
 localStorage.setItem("access_token", accessToken)
 localStorage.setItem("refresh_token", refreshToken)
 let clientId = params.get("client_id")
-console.log(clientId, localStorage.getItem("client_id"))
 if(clientId==null){
     clientId = localStorage.getItem("client_id")
 }
 localStorage.setItem("client_id", clientId)
 let playing = true;
+let ISshuffling = true;
 
 
 
 const playPauseButton = document.getElementById("playPauseButton")
 const prevButton = document.getElementById("prevButton")
 const nextButton = document.getElementById("nextButton")
+
+const shuffle = document.getElementById("shuffle")
+const queue = document.getElementById("queue")
+const queueButton = document.getElementById("queueButton")
+
+queueButton.addEventListener("click", async function(){
+    console.log(queue.style.display)
+    if(queue.style.display == "none"){
+        queue.innerHTML  = "";
+        queue.style.display = "inherit";
+        getQueue()
+        queueButton.children[0].style.fill = "Crimson";
+    }else{
+        queue.style.display = "none"
+        queueButton.children[0].style.fill = "antiqueWhite";
+    }
+})
+
+shuffle.addEventListener("click", async function(){
+    const url = "https://api.spotify.com/v1/me/player/shuffle?state="+!ISshuffling
+    const payload = {
+        method: "PUT",
+        headers: {
+            "Authorization": "Bearer "+accessToken
+        }
+    }
+    const body = await fetch(url, payload)
+    if(body.ok){
+        ISshuffling = !ISshuffling
+        updateShuffleButton()
+    }
+})
+
+function updateShuffleButton(){
+    if(ISshuffling){
+        shuffle.children[0].style.fill = "Crimson"
+    }else{
+        shuffle.children[0].style.fill = "antiqueWhite"
+    }
+}
 
 const pausedSVG=`<svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
 	width="10" height="10" viewBox="0 0 277.338 277.338"
@@ -52,7 +89,6 @@ const playSVG = `<svg fill="#000000" height="10" width="10" version="1.1" id="Ca
 </g>
 </svg>`
 
-console.log(accessToken, refreshToken)
 
 function SetPlayPauseButtonState(){
     if(playing){
@@ -65,6 +101,8 @@ function SetPlayPauseButtonState(){
 
 
 async function getPlaying(){
+    getShuffling()
+
     const url = "https://api.spotify.com/v1/me/player/currently-playing"
 
     const payload = {
@@ -96,16 +134,15 @@ async function RefreshrefreshToken(){
     const response = await body.json();
 
     if(response.access_token){
-        let accessToken = response.access_token;
-        console.log("accessToken = "+accessToken)
-
+        accessToken = response.access_token;
+        console.log(accessToken)
         localStorage.setItem("access_token", accessToken)
     }
     if (response.refresh_token) {
-        let refreshToken = response.refresh_token;
+        refreshToken = response.refresh_token;
         localStorage.setItem("refresh_token", refreshToken)
     }
-}
+}1
 
 function extractData(json){
     const item = json.item
@@ -127,8 +164,6 @@ function extractData(json){
         img.style.boxShadow = `0px 0px 10px 5px ${color.rgba}`;
     });
 
-
-
     const length = item.duration_ms / 1000
     const pos = json.progress_ms / 1000
 
@@ -141,7 +176,7 @@ function extractData(json){
 }
 
 // if needed
-async function getDeviceId(){
+async function getShuffling(){
     const url = "https://api.spotify.com/v1/me/player"
     
     const payload = {
@@ -155,9 +190,8 @@ async function getDeviceId(){
 
     const json = await body.json()
 
-    deviceId = json.device.id
-
-    return json.device.id
+    ISshuffling = json.shuffle_state
+    updateShuffleButton()
 }
 
 async function pausePlay(){
@@ -206,7 +240,8 @@ async function normRequest(url, method, errObj, resp = false){
     if (!resp){
         return body.ok
     }else{
-        return body
+        const json = await body.json()
+        return json
     }
 }
 
@@ -215,6 +250,7 @@ async function normRequest(url, method, errObj, resp = false){
 document.addEventListener("DOMContentLoaded", function(){
     getPlaying()
     setInterval(getPlaying, 1000)
+    setInterval(getQueue, 10000)
 })
 
 playPauseButton.addEventListener("click", pausePlay)
@@ -223,3 +259,23 @@ nextButton.addEventListener("click", next)
 document.getElementById("playbar").addEventListener("change", function(event){
     move(Math.round(event.target.value * 1000))
 })
+
+
+async function getQueue(){
+    console.log(queue.style.display)
+    if(queue.style.display != "none"){
+        const url = "https://api.spotify.com/v1/me/player/queue"
+
+    let json = await normRequest(url, "GET", "get queue", true)
+
+    document.getElementById("queue").innerHTML = ""   
+    let queue = json.queue
+    for(let item of queue){
+        let name = item.name
+        let image = item.album.images[0].url
+        let artist = item.artists[0].name
+        let template = `<div class="recentTrack"><img class="recentCover" src="${image}"><div class="currentTrack"><h4>${name}</h4><h5>${artist}</h5></div></div>`
+        document.getElementById("queue").innerHTML+=template
+    }
+    }
+}

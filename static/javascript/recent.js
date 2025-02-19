@@ -47,7 +47,7 @@ async function getRecentlyPlayed(){
         let popularity = item.popularity
         let artist = item.artists[0].name
         let image = item.album.images[0].url
-        let template = `<div class="recentTrack"><img class="recentCover" src="${image}"><div class="currentTrack"><h3>${name}</h3><h4>${artist}</h4><h4>Popularity: ${popularity}/100</h4></div></div>`
+        let template = `<div class="recentTrack"><img class="recentCover" src="${image}"><div class="currentTrack"><h4>${name}</h4><h5 class="recentartist">${artist}</h5><h5 class="recenttrackpopularity">Popularity: ${popularity}/100</h5></div></div>`
         document.querySelector(".recents").innerHTML+=template
     }
 }

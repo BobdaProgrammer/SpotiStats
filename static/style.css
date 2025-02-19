@@ -4,6 +4,10 @@ body{
     background-color: antiqueWhite;
 }
 
+body.modal-open{
+    overflow: hidden;
+}
+
 
 /* phone styles */
 @media only screen and (max-width: 786px){
@@ -49,9 +53,14 @@ body{
     position: absolute;
 }
 
+.player .currentTrack{
+    margin-top: 10px;
+}
+
 .currentTrack{
     color: antiqueWhite;
     text-align: left;
+    overflow: auto;
 }
 
 .playbar{
@@ -72,7 +81,7 @@ body{
   appearance: none;
   width: 10px; /* Set a specific slider handle width */
   height: 10px; /* Slider handle height */
-  background: antiqueWhite; /* Green background */
+  background: antiqueWhite; /* background */
   cursor: pointer; /* Cursor on hover */
   border-radius: 100%;
   outline:none;
@@ -82,7 +91,7 @@ body{
 .playbar::-moz-range-thumb {
   width: 10px; /* Set a specific slider handle width */
   height: 10px; /* Slider handle height */
-  background: antiqueWhite; /* Green background */
+  background: antiqueWhite; /* background */
   cursor: pointer; /* Cursor on hover */
   border-radius: 100%;
   outline:none;
@@ -92,8 +101,8 @@ body{
 
 .controlButton{
     color: black;
-    width: 50px;
-    height: 50px;
+    width: 20%;
+    aspect-ratio: 1/1;
     border-radius: 100%;
     background-color: antiqueWhite;
     outline: none;
@@ -102,8 +111,7 @@ body{
 }
 
 .controlButton:hover{
-    width: 55px;
-    height: 55px;
+    width: 21%;
     cursor: pointer;
 }
 
@@ -120,6 +128,56 @@ body{
 .artist{
     margin-top:5px;
     margin-bottom: 5px;
+}
+
+.controlPanel{
+    padding: 5px
+}
+
+.playOpt{
+    padding: 7px;
+    background-color: transparent;
+    border:none;
+    outline: none;
+    border-radius: 7px;
+    transition: 0.3s ease;
+}
+
+.playOpt:hover{
+    background-color: #ff6933;
+}
+
+.playOpt svg{
+    width: 20px;
+    fill: antiqueWhite;
+}
+
+.playOpts{
+    margin-top: 10px;
+    text-align:center;
+    display: flex;
+    justify-content: space-evenly; 
+    width: 100%; /* Adjust based on your needs */
+}
+
+#queue .recentTrack{
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.recentTrack .currentTrack{
+    max-width: 50%;
+    height: 100%;
+    scrollbar-color: Crimson rgba(255, 255, 255, 0.0);
+    scrollbar-width: medium;
+}
+
+#queue .recentTrack .currentTrack h5{
+    margin: 0
+}
+
+#queue{
+    margin-top: 90vh;
 }
 
 /* stats page */
@@ -275,7 +333,9 @@ body{
     overflow: auto;
     flex-direction: column;
     justify-content: space-between; /* Even spacing */
-    scrollbar-color: anitiqueWhite;
+
+    scrollbar-color: Crimson rgba(255, 255, 255, 0.0);
+    scrollbar-width: medium;
 }
 
 .infoCard svg{
@@ -304,7 +364,7 @@ body{
 }
 
 .infoCard .currentTrack::-webkit-scrollbar-thumb {
-    background: antiqueWhite; /* Scrollbar handle color */
+    background: Crimson; /* Scrollbar handle color */
 }
 
 /* recently played */
@@ -325,15 +385,20 @@ body{
     box-shadow: 5px 5px 5px coral;
 }
 
-.recentTrack h3{
+.recentTrack h4{
     margin-top: 0;
     margin-bottom: 5px;
 }
-
-.recentTrack h4{
+.recenttrackpopularity{
+    margin-bottom: 0;
+    margin-top: 0;
+}
+.recentartist{
     margin-top: 0;
     margin-bottom: 15px;
 }
+
+
 
 .recentCover{
     height: 100%;

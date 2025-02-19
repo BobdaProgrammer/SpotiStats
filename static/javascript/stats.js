@@ -100,13 +100,15 @@ async function getTopAlbums(){
         console.log(albums, sortedAlbums)
         for(let album in sortedAlbums){
             let parts = album.split("|")
-             let template = `<div class="stat"><img src="${parts[1]}" class="statCover" crossorigin="anonymous"><div class="currentTrack"><h6 class="trackTitle">${parts[0]}</h6><h6 class="trackTitle">${parts[2]}</h6></div></div>`
+             let template = `<div class="stat" id="${parts[3]}"><img src="${parts[1]}" class="statCover" crossorigin="anonymous"><div class="currentTrack"><h6 class="trackTitle">${parts[0]}</h6><h6 class="trackTitle">${parts[2]}</h6></div></div>`
             topAlbums.push(template)
         }
         document.getElementById("statList").innerHTML = topAlbums.join("")
         accentThemImages()
+        getCardsready("album")
     }else{
         document.getElementById("statList").innerHTML = topAlbums.join("")
+        getCardsready("album")
     }
 }
 
@@ -168,7 +170,7 @@ async function getTopArtists(display = true){
         }
     }else{
         document.getElementById("statList").innerHTML = topArtists.join("")
-        getCardsready()
+        getCardsready("artist")
     }
 }
 
@@ -191,6 +193,8 @@ function accentThemImages(){
 
 function createTracks(items, display){
     for(let item of items){
+        let AlbumId = item.album.id
+        let id = item.id
         let name = item.name
         let image = item.album.images[0].url
         let artist = item.artists[0].name
@@ -199,12 +203,12 @@ function createTracks(items, display){
         let seconds = length % 60
         let minutes = Math.floor(length/60).toString()+":"+(seconds<10? `0${seconds}`:seconds.toString())
         console.log(minutes)
-        let template = `<div class="stat"><img src="${image}" class="statCover" crossorigin="anonymous"><div class="currentTrack"><h6 class="trackTitle">${name}</h6><h6 class="trackTitle">${artist}</h6></div><div class="hidden" id="extraInfo">${popularity}|${minutes}</div></div>`
+        let template = `<div class="stat" id="${id}"><img src="${image}" class="statCover" crossorigin="anonymous"><div class="currentTrack"><h6 class="trackTitle">${name}</h6><h6 class="trackTitle">${artist}</h6></div><div class="hidden" id="extraInfo">${popularity}|${minutes}</div></div>`
         //console.log(template)
         topTracks.push(template)
 
         if(item.album.album_type=="album"){
-            albums[item.album.name+"|"+image+"|"+artist]+=1
+            albums[item.album.name+"|"+image+"|"+artist+"|"+AlbumId]+=1
         }
     }
     if(display){
@@ -219,15 +223,17 @@ const closeSVG = `<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width=
 <path d="M 21.734375 19.640625 L 19.636719 21.734375 C 19.253906 22.121094 18.628906 22.121094 18.242188 21.734375 L 13 16.496094 L 7.761719 21.734375 C 7.375 22.121094 6.746094 22.121094 6.363281 21.734375 L 4.265625 19.640625 C 3.878906 19.253906 3.878906 18.628906 4.265625 18.242188 L 9.503906 13 L 4.265625 7.761719 C 3.882813 7.371094 3.882813 6.742188 4.265625 6.363281 L 6.363281 4.265625 C 6.746094 3.878906 7.375 3.878906 7.761719 4.265625 L 13 9.507813 L 18.242188 4.265625 C 18.628906 3.878906 19.257813 3.878906 19.636719 4.265625 L 21.734375 6.359375 C 22.121094 6.746094 22.121094 7.375 21.738281 7.761719 L 16.496094 13 L 21.734375 18.242188 C 22.121094 18.628906 22.121094 19.253906 21.734375 19.640625 Z"></path>
 </svg>`
 
-function getCardsready(artist=false){
+function getCardsready(type="tracks"){
     document.querySelectorAll(".stat").forEach(stat =>{
-        stat.addEventListener("click", function(){
+        stat.addEventListener("click", async function(){
+            document.body.classList.add("modal-open");
             let children = stat.children
             let imageUrl = children[0].src
             console.log(imageUrl)
             let name = children[1].children[0].textContent
             console.log(name)
-            if(!artist){
+            if(type=="tracks"){
+
                 let artist = children[1].children[1].textContent
                 console.log(artist)
                 let parts = children[2].textContent.split("|")
@@ -235,9 +241,9 @@ function getCardsready(artist=false){
                 let duration = parts[1]
 
                 console.log(popularity)
-                let template = `<img src="${imageUrl}"><div class="currentTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">${artist}</h3><h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Duration: ${duration}</h3><button class="close" onclick="document.querySelector('.pageTaker').style.display='none'">${closeSVG}</button></div>`
+                let template = `<img src="${imageUrl}"><div class="currentTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">${artist}</h3><h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Duration: ${duration}</h3><button class="close" onclick="document.querySelector('.pageTaker').style.display='none';            document.body.classList.remove('modal-open');">${closeSVG}</button></div>`
                 showCard(template)
-            }else{
+            }else if(type=="artist"){
                 let popularity = children[1].children[1].textContent.split(": ")[1].split("/")[0]
                 
                 let followers = children[2].textContent
@@ -251,7 +257,22 @@ function getCardsready(artist=false){
                 }
                 res = res.split("").reverse().join("")
 
-                let template = `<img src="${imageUrl}"><div class="currentTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Followers: ${res}</h3><button class="close" onclick="document.querySelector('.pageTaker').style.display='none'">${closeSVG}</button></div>`
+                let template = `<img src="${imageUrl}"><div class="currentTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Followers: ${res}</h3><button class="close" onclick="document.querySelector('.pageTaker').style.display='none'; document.body.classList.remove('modal-open');">${closeSVG}</button></div>`
+                showCard(template)
+            }else{
+                let id = stat.id
+                const url = "https://api.spotify.com/v1/albums/"+id
+                let json = await normRequest(url, "GET", "get album data")
+                let artist = children[1].children[1].textContent
+                let popularity = json.popularity
+                let releaseDate = json.release_date
+                console.log(id, popularity)
+                let tracks = json.tracks.items
+                let trackHTML = `<h4 class="trackTitle">Tracks:</h4>`;
+                for(let i = 0; i<tracks.length; i++){
+                    trackHTML+=`<h6 class="trackTitle">${i+1}: ${tracks[i].name}</h6>`
+                }
+                let template = `<img src="${imageUrl}"><div class="currentTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">${artist}</h3><h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Release date: ${releaseDate}</h3>${trackHTML}<button class="close" onclick="document.querySelector('.pageTaker').style.display='none'; document.body.classList.remove('modal-open');">${closeSVG}</button></div>`
                 showCard(template)
             }
 
@@ -292,7 +313,7 @@ function createArtists(items, display){
     if(display){
         document.getElementById("statList").innerHTML = topArtists.join("")
         accentThemImages()
-        getCardsready(true)
+        getCardsready("artist")
     }
 }
 
