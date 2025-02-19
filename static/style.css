@@ -2,6 +2,8 @@ body{
     text-align: center;
     font-family: "Montserrat";
     background-color: antiqueWhite;
+    caret-color: transparent;
+    user-select: none;
 }
 
 body.modal-open{
@@ -333,9 +335,11 @@ body.modal-open{
     overflow: auto;
     flex-direction: column;
     justify-content: space-between; /* Even spacing */
-
+    text-wrap: wrap;
+    word-wrap: none;
     scrollbar-color: Crimson rgba(255, 255, 255, 0.0);
     scrollbar-width: medium;
+    max-width: 40%;
 }
 
 .infoCard svg{

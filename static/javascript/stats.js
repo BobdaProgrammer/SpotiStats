@@ -203,13 +203,16 @@ function createTracks(items, display){
         let seconds = length % 60
         let minutes = Math.floor(length/60).toString()+":"+(seconds<10? `0${seconds}`:seconds.toString())
         console.log(minutes)
-        let template = `<div class="stat" id="${id}"><img src="${image}" class="statCover" crossorigin="anonymous"><div class="currentTrack"><h6 class="trackTitle">${name}</h6><h6 class="trackTitle">${artist}</h6></div><div class="hidden" id="extraInfo">${popularity}|${minutes}</div></div>`
+        let albumName = ""
+        if(item.album.album_type=="album"){
+            albumName = item.album.name
+            albums[item.album.name+"|"+image+"|"+artist+"|"+AlbumId]+=1
+        }
+        let template = `<div class="stat" id="${id}"><img src="${image}" class="statCover" crossorigin="anonymous"><div class="currentTrack"><h6 class="trackTitle">${name}</h6><h6 class="trackTitle">${artist}</h6></div><div class="hidden" id="extraInfo">${popularity}|${minutes}|${albumName}</div></div>`
         //console.log(template)
         topTracks.push(template)
 
-        if(item.album.album_type=="album"){
-            albums[item.album.name+"|"+image+"|"+artist+"|"+AlbumId]+=1
-        }
+
     }
     if(display){
         console.log(topTracks.join(""))
@@ -239,9 +242,13 @@ function getCardsready(type="tracks"){
                 let parts = children[2].textContent.split("|")
                 let popularity=parts[0] 
                 let duration = parts[1]
+                let albumName = ""
+                if(parts[2]!=""){
+                    albumName = parts[2]
+                }
 
                 console.log(popularity)
-                let template = `<img src="${imageUrl}"><div class="currentTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">${artist}</h3><h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Duration: ${duration}</h3><button class="close" onclick="document.querySelector('.pageTaker').style.display='none';            document.body.classList.remove('modal-open');">${closeSVG}</button></div>`
+                let template = `<img src="${imageUrl}"><div class="currentTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">${artist}</h3>${albumName!=""?`<h3 class="trackTitle">Album: ${albumName}</h3>`:``}<h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Duration: ${duration}</h3><button class="close" onclick="document.querySelector('.pageTaker').style.display='none';            document.body.classList.remove('modal-open');">${closeSVG}</button></div>`
                 showCard(template)
             }else if(type=="artist"){
                 let popularity = children[1].children[1].textContent.split(": ")[1].split("/")[0]
