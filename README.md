@@ -8,7 +8,8 @@
 - [x] Queue
 - [x] Statistics
 - [x] Recently played
-- [ ] nearby concerts
+- [ ] Share stats as image
+- [ ] nearby concerts based on taste
 
 ## Project overview
 ### Backend
