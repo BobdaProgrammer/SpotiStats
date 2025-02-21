@@ -195,6 +195,7 @@ function createTracks(items, display){
     for(let item of items){
         let AlbumId = item.album.id
         let id = item.id
+        let trackLink = item.external_urls.spotify
         let name = item.name
         let image = item.album.images[0].url
         let artist = item.artists[0].name
@@ -208,7 +209,7 @@ function createTracks(items, display){
             albumName = item.album.name
             albums[item.album.name+"|"+image+"|"+artist+"|"+AlbumId]+=1
         }
-        let template = `<div class="stat" id="${id}"><img src="${image}" class="statCover" crossorigin="anonymous"><div class="currentTrack"><h6 class="trackTitle">${name}</h6><h6 class="trackTitle">${artist}</h6></div><div class="hidden" id="extraInfo">${popularity}|${minutes}|${albumName}</div></div>`
+        let template = `<div class="stat" id="${id}"><img src="${image}" class="statCover" crossorigin="anonymous"><div class="currentTrack"><h6 class="trackTitle">${name}</h6><h6 class="trackTitle">${artist}</h6></div><div class="hidden" id="extraInfo">${popularity}|${minutes}|${albumName}|${trackLink}</div></div>`
         //console.log(template)
         topTracks.push(template)
 
@@ -221,7 +222,18 @@ function createTracks(items, display){
         getCardsready()
     }
 }
-
+const playSVG = `<svg class="playIcon" fill="antiqueWhite" height="20" width="20" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+	viewBox="0 0 17.804 17.804" xml:space="preserve">
+<g>
+	<g id="c98_play">
+		<path d="M2.067,0.043C2.21-0.028,2.372-0.008,2.493,0.085l13.312,8.503c0.094,0.078,0.154,0.191,0.154,0.313
+			c0,0.12-0.061,0.237-0.154,0.314L2.492,17.717c-0.07,0.057-0.162,0.087-0.25,0.087l-0.176-0.04
+			c-0.136-0.065-0.222-0.207-0.222-0.361V0.402C1.844,0.25,1.93,0.107,2.067,0.043z"/>
+	</g>
+	<g id="Capa_1_78_">
+	</g>
+</g>
+</svg>`
 const closeSVG = `<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 26 26" fill="antiqueWhite">
 <path d="M 21.734375 19.640625 L 19.636719 21.734375 C 19.253906 22.121094 18.628906 22.121094 18.242188 21.734375 L 13 16.496094 L 7.761719 21.734375 C 7.375 22.121094 6.746094 22.121094 6.363281 21.734375 L 4.265625 19.640625 C 3.878906 19.253906 3.878906 18.628906 4.265625 18.242188 L 9.503906 13 L 4.265625 7.761719 C 3.882813 7.371094 3.882813 6.742188 4.265625 6.363281 L 6.363281 4.265625 C 6.746094 3.878906 7.375 3.878906 7.761719 4.265625 L 13 9.507813 L 18.242188 4.265625 C 18.628906 3.878906 19.257813 3.878906 19.636719 4.265625 L 21.734375 6.359375 C 22.121094 6.746094 22.121094 7.375 21.738281 7.761719 L 16.496094 13 L 21.734375 18.242188 C 22.121094 18.628906 22.121094 19.253906 21.734375 19.640625 Z"></path>
 </svg>`
@@ -248,12 +260,14 @@ function getCardsready(type="tracks"){
                 }
 
                 console.log(popularity)
-                let template = `<img src="${imageUrl}"><div class="currentTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">${artist}</h3>${albumName!=""?`<h3 class="trackTitle">Album: ${albumName}</h3>`:``}<h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Duration: ${duration}</h3><button class="close" onclick="document.querySelector('.pageTaker').style.display='none';            document.body.classList.remove('modal-open');">${closeSVG}</button></div>`
+                let template = `<div class="image-container"><img src="${imageUrl}"><a target="_blank" href="${parts[3]}">${playSVG}</a></div><div class="currentTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">${artist}</h3>${albumName!=""?`<h3 class="trackTitle">Album: ${albumName}</h3>`:``}<h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Duration: ${duration}</h3><button class="close" onclick="document.querySelector('.pageTaker').style.display='none';            document.body.classList.remove('modal-open');">${closeSVG}</button></div>`
                 showCard(template)
             }else if(type=="artist"){
                 let popularity = children[1].children[1].textContent.split(": ")[1].split("/")[0]
                 
-                let followers = children[2].textContent
+                let parts = children[2].textContent.split("|")
+                let followers = parts[0]
+                let url = parts[1]
                 let reverse = followers.split("").reverse().join("")
                 let res = ""
                 for(let i = 0; i < reverse.length; i ++){
@@ -264,7 +278,7 @@ function getCardsready(type="tracks"){
                 }
                 res = res.split("").reverse().join("")
 
-                let template = `<img src="${imageUrl}"><div class="currentTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Followers: ${res}</h3><button class="close" onclick="document.querySelector('.pageTaker').style.display='none'; document.body.classList.remove('modal-open');">${closeSVG}</button></div>`
+                let template = `<div class="image-container"><img src="${imageUrl}"><a target="_blank" href="${url}">${playSVG}</a></div><div class="currentTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Followers: ${res}</h3><button class="close" onclick="document.querySelector('.pageTaker').style.display='none'; document.body.classList.remove('modal-open');">${closeSVG}</button></div>`
                 showCard(template)
             }else{
                 let id = stat.id
@@ -279,7 +293,7 @@ function getCardsready(type="tracks"){
                 for(let i = 0; i<tracks.length; i++){
                     trackHTML+=`<h6 class="trackTitle">${i+1}: ${tracks[i].name}</h6>`
                 }
-                let template = `<img src="${imageUrl}"><div class="currentTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">${artist}</h3><h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Release date: ${releaseDate}</h3>${trackHTML}<button class="close" onclick="document.querySelector('.pageTaker').style.display='none'; document.body.classList.remove('modal-open');">${closeSVG}</button></div>`
+                let template = `<img src="${imageUrl}"><div class="curr    background: rgba(0, 0, 0, 0.7);entTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">${artist}</h3><h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Release date: ${releaseDate}</h3>${trackHTML}<button class="close" onclick="document.querySelector('.pageTaker').style.display='none'; document.body.classList.remove('modal-open');">${closeSVG}</button></div>`
                 showCard(template)
             }
 
@@ -299,10 +313,12 @@ function showCard(inner){
 function createArtists(items, display){
     for(let item of items){
         let name = item.name
+        let artistUrl = item.external_urls.spotify
+        console.log(artistUrl)
         let image = item.images[0].url
         let popularity = item.popularity
         let followers = item.followers.total
-        let template = `<div class="stat"><img src="${image}" class="statCover"crossorigin="anonymous"><div class="currentTrack"><h6 class="trackTitle">${name}</h6><h6 class="trackTitle">popularity: ${popularity}/100</h6></div><div class="hidden" id="extraInfo">${followers}</div></div>`
+        let template = `<div class="stat"><img src="${image}" class="statCover"crossorigin="anonymous"><div class="currentTrack"><h6 class="trackTitle">${name}</h6><h6 class="trackTitle">popularity: ${popularity}/100</h6></div><div class="hidden" id="extraInfo">${followers}|${artistUrl}</div></div>`
         //console.log(template)
         topArtists.push(template)
 

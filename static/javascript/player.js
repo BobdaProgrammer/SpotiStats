@@ -142,7 +142,7 @@ async function RefreshrefreshToken(){
         refreshToken = response.refresh_token;
         localStorage.setItem("refresh_token", refreshToken)
     }
-}1
+}
 
 function extractData(json){
     const item = json.item

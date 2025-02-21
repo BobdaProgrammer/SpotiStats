@@ -11,10 +11,26 @@ body.modal-open{
 }
 
 
+/*.playIcon{
+    opacity: 0;
+    transition: 2s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(50%, 50%);
+}*/
+
 /* phone styles */
-@media only screen and (max-width: 786px){
+@media only screen and (max-width: 700px){
     .player{
-        width: 85%;
+        width: 60% !important;
+        max-height: 70% !important;
+    }
+    .recentTrack{
+        max-width: 80% !important;
+    }
+    .infoCard{
+        width: 80% !important;
     }
 }
 
@@ -53,6 +69,12 @@ body.modal-open{
     left: 50%;
     transform: translate(-50%,-50%);
     position: absolute;
+    transition: 0.25s ease;
+  overflow-y: auto;  /* Enable vertical scrolling */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+
+    scrollbar-color: Crimson rgba(255, 255, 255, 0.0);
+    scrollbar-width: medium;
 }
 
 .player .currentTrack{
@@ -183,6 +205,64 @@ body.modal-open{
 }
 
 /* stats page */
+
+.image-container {
+    margin-right: 15px;
+    max-width: 50%;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.image-container img {
+    display: block;
+    transition: filter 0.3s ease;
+}
+
+.image-container a {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    padding: 10px;
+    border-radius: 50%;
+    margin-left:0 !important;
+    z-index: 999999999;
+    cursor:pointer;
+}
+
+.image-container:hover img {
+    filter: brightness(0.7);
+}
+
+.image-container:hover a {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+}
+
+.image-container a svg{
+    fill: antiqueWhite;
+}
+
+.shareButton{
+    width: 40px;
+    aspect-ratio: 1/1;
+    border-radius: 30px;
+    background-color: #1db954;
+    border: none;
+    outline: none;
+    text-align:center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shareButton svg{
+    display:block;
+    fill: black;
+}
 
 .switcherButton{
     margin-left: 5vw;

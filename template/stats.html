@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="lang">
 <head>
-    <meta charset="charset">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spotify currently playing</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,6 +29,13 @@
             </button>
         </form>
     </div>
+    <form action="/share" style="position: fixed; top:10px; right:10px; z-index: 999">
+        <button type="submit" class="shareButton">
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 24 24">
+    <path d="M 18 2 A 3 3 0 0 0 15 5 A 3 3 0 0 0 15.054688 5.5605469 L 7.9394531 9.7109375 A 3 3 0 0 0 6 9 A 3 3 0 0 0 3 12 A 3 3 0 0 0 6 15 A 3 3 0 0 0 7.9355469 14.287109 L 15.054688 18.439453 A 3 3 0 0 0 15 19 A 3 3 0 0 0 18 22 A 3 3 0 0 0 21 19 A 3 3 0 0 0 18 16 A 3 3 0 0 0 16.0625 16.712891 L 8.9453125 12.560547 A 3 3 0 0 0 9 12 A 3 3 0 0 0 8.9453125 11.439453 L 16.060547 7.2890625 A 3 3 0 0 0 18 8 A 3 3 0 0 0 21 5 A 3 3 0 0 0 18 2 z"></path>
+</svg>
+        </button>
+    </form>
     <div class="statSelector">
         <div class="timeFrames selectorLine">
             <button class="selectorButtonTime active" id="4weeks">4 weeks</button>
