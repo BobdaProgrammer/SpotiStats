@@ -1,6 +1,6 @@
 uris = []
 
-async function getTopTracks(){
+async function PlaylistgetTopTracks(){
     const url = "https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=50"
     const json = await normRequest(url, "GET", "get top tracks")
     let items = json.items
@@ -42,7 +42,7 @@ async function normRequest(url, method, errObj, Reqbody = null) {
 
 
 document.addEventListener("DOMContentLoaded", function(){
-    getTopTracks()
+    PlaylistgetTopTracks()
 })
 
 async function getUserId(){

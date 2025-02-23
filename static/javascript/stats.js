@@ -86,12 +86,31 @@ function changeTimeFrame(frame){
 
 
 
+async function getTopTracks(display = true){
+    console.log("TOP TRACKS")
+    if(topTracks.length==0){
+        console.log("GETTING TOP TRACKS")
+        const url = "https://api.spotify.com/v1/me/top/tracks?time_range="+timeFrame+"&limit=50&offset=0" 
+        let json = await normRequest(url, "GET", "get top tracks")
+        if(json!=null){
+            console.log(json)
+            createTracks(json.items, display)
+        }else{
+            console.log("json is null")
+        }
+    }else{
+        console.log("WHAT")
+        document.getElementById("statList").innerHTML = topTracks.join("")
+        getCardsready()
+    }
+}
 
 async function getTopAlbums(){
     console.log(albums)
     if(Object.keys(albums).length==0){
         console.log("no albums yet")
         await getTopTracks(false)
+        console.log("got tracks",albums)
     }
     if(topAlbums.length==0){
         const sortedAlbums = Object.fromEntries(
@@ -146,19 +165,6 @@ async function getTopGenres(){
         });
 }
 
-async function getTopTracks(display = true){
-    if(topTracks.length==0){
-        const url = "https://api.spotify.com/v1/me/top/tracks?time_range="+timeFrame+"&limit=50&offset=0" 
-        let json = await normRequest(url, "GET", "get top tracks")
-        if(json!=null){
-            console.log(json)
-            createTracks(json.items, display)
-        }
-    }else{
-        document.getElementById("statList").innerHTML = topTracks.join("")
-        getCardsready()
-    }
-}
 
 async function getTopArtists(display = true){
     if(topArtists.length==0){
@@ -192,6 +198,7 @@ function accentThemImages(){
 }
 
 function createTracks(items, display){
+    console.log("CREATING TOP TRACKS")
     for(let item of items){
         let AlbumId = item.album.id
         let id = item.id
@@ -207,6 +214,7 @@ function createTracks(items, display){
         console.log(minutes)
         let albumName = ""
         if(item.album.album_type=="album"){
+            console.log(item.album.name)
             albumName = item.album.name
             albums[item.album.name+"|"+image+"|"+artist+"|"+AlbumId]+=1
         }
@@ -295,7 +303,7 @@ function getCardsready(type="tracks"){
                 for(let i = 0; i<tracks.length; i++){
                     trackHTML+=`<h6 class="trackTitle">${i+1}: ${tracks[i].name}</h6>`
                 }
-                let template = `<img src="${imageUrl}"><div class="curr    background: rgba(0, 0, 0, 0.7);entTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">${artist}</h3><h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Release date: ${releaseDate}</h3>${trackHTML}<button class="close" onclick="document.querySelector('.pageTaker').style.display='none'; document.body.classList.remove('modal-open');">${closeSVG}</button></div>`
+                let template = `<img src="${imageUrl}"><div class="currentTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">${artist}</h3><h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Release date: ${releaseDate}</h3>${trackHTML}<button class="close" onclick="document.querySelector('.pageTaker').style.display='none'; document.body.classList.remove('modal-open');">${closeSVG}</button></div>`
                 showCard(template)
             }
 
