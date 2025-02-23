@@ -195,6 +195,7 @@ function createTracks(items, display){
     for(let item of items){
         let AlbumId = item.album.id
         let id = item.id
+        let uri = item.uri;
         let trackLink = item.external_urls.spotify
         let name = item.name
         let image = item.album.images[0].url
@@ -209,7 +210,7 @@ function createTracks(items, display){
             albumName = item.album.name
             albums[item.album.name+"|"+image+"|"+artist+"|"+AlbumId]+=1
         }
-        let template = `<div class="stat" id="${id}"><img src="${image}" class="statCover" crossorigin="anonymous"><div class="currentTrack"><h6 class="trackTitle">${name}</h6><h6 class="trackTitle">${artist}</h6></div><div class="hidden" id="extraInfo">${popularity}|${minutes}|${albumName}|${trackLink}</div></div>`
+        let template = `<div class="stat" id="${id}"><img src="${image}" class="statCover" crossorigin="anonymous"><div class="currentTrack"><h6 class="trackTitle">${name}</h6><h6 class="trackTitle">${artist}</h6></div><div class="hidden" id="extraInfo">${popularity}|${minutes}|${albumName}|${uri}</div></div>`
         //console.log(template)
         topTracks.push(template)
 
@@ -258,9 +259,10 @@ function getCardsready(type="tracks"){
                 if(parts[2]!=""){
                     albumName = parts[2]
                 }
+                console.log(parts[3])
 
                 console.log(popularity)
-                let template = `<div class="image-container"><img src="${imageUrl}"><a target="_blank" href="${parts[3]}">${playSVG}</a></div><div class="currentTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">${artist}</h3>${albumName!=""?`<h3 class="trackTitle">Album: ${albumName}</h3>`:``}<h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Duration: ${duration}</h3><button class="close" onclick="document.querySelector('.pageTaker').style.display='none';            document.body.classList.remove('modal-open');">${closeSVG}</button></div>`
+                let template = `<div class="image-container"><img src="${imageUrl}"><div style="position: absolute" onclick="play('${parts[3]}')">${playSVG}</div></div><div class="currentTrack"><h3 class="trackTitle">${name}</h3><h3 class="trackTitle">${artist}</h3>${albumName!=""?`<h3 class="trackTitle">Album: ${albumName}</h3>`:``}<h3 class="trackTitle">Popularity: ${popularity}/100</h3><h3 class="trackTitle">Duration: ${duration}</h3><button class="close" onclick="document.querySelector('.pageTaker').style.display='none';            document.body.classList.remove('modal-open');">${closeSVG}</button></div>`
                 showCard(template)
             }else if(type=="artist"){
                 let popularity = children[1].children[1].textContent.split(": ")[1].split("/")[0]
@@ -308,7 +310,22 @@ function showCard(inner){
     document.querySelector(".pageTaker").style.display="flex";
 }
 
-
+async function play(uri){
+    const url = "https://api.spotify.com/v1/me/player/play"
+    const payload = {
+        method: "PUT",
+        headers:{
+            "Authorization":"Bearer "+localStorage.getItem("access_token")
+        },
+        body: JSON.stringify({
+            "uris": [uri]
+        })
+    }
+    const body = await fetch(url, payload)
+    if(!body.ok){
+        console.error("Error couldnt play song")
+    }
+}
 
 function createArtists(items, display){
     for(let item of items){

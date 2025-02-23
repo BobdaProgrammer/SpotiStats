@@ -19,7 +19,11 @@ localStorage.setItem("client_id", clientId)
 let playing = true;
 let ISshuffling = true;
 
-
+document.addEventListener("keydown", function(event){
+    if(event.key==" "){
+        pausePlay()
+    }
+})
 
 const playPauseButton = document.getElementById("playPauseButton")
 const prevButton = document.getElementById("prevButton")
