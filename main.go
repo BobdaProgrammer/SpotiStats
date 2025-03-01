@@ -67,7 +67,7 @@ func main(){
 
 
     goth.UseProviders(
-        spotify.New(CLIENT_ID, CLIENT_SECRET, "http://localhost:8080/auth/spotify/callback", "user-read-currently-playing", "user-modify-playback-state", "user-read-playback-state", "user-top-read", "user-read-recently-played", "playlist-modify-private","playlist-modify-public"),
+        spotify.New(CLIENT_ID, CLIENT_SECRET, "http://localhost:1234/auth/spotify/callback", "user-read-currently-playing", "user-modify-playback-state", "user-read-playback-state", "user-top-read", "user-read-recently-played", "playlist-modify-private","playlist-modify-public"),
     )
 
     e.GET("/refreshToken", func(c echo.Context) error{

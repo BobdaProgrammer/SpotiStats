@@ -10,16 +10,6 @@ body.modal-open{
     overflow: hidden;
 }
 
-
-/*.playIcon{
-    opacity: 0;
-    transition: 2s ease;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translate(50%, 50%);
-}*/
-
 /* phone styles */
 @media only screen and (max-width: 700px){
     .player{
@@ -477,9 +467,9 @@ body.modal-open{
     border-radius: 15px;
     height: 100px;
     padding: 10px;
-
     border: 2px solid antiqueWhite;
     box-shadow: 5px 5px 5px coral;
+    position: relative;
 }
 
 .recentTrack h4{
@@ -502,4 +492,43 @@ body.modal-open{
     margin-right: 10px;
     aspect-ratio: 1/1;
     border-radius: 15px;
+    transition: 1s ease;
+}
+
+.recentTrack .image-container{
+    display: inline-block;
+}
+
+.playCent{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    padding: 10px;
+    border-radius: 50%;
+    margin-left:0 !important;
+    z-index: 999999999;
+    cursor:pointer;
+}
+.ric{
+    text-align: left;
+    padding: none;
+    margin-right: 15px;
+    position: relative;
+}
+.recentCover:hover{
+    filter: brightness(0.7);
+}
+.ric:hover div{
+    opacity: 100;
+}
+
+.ric div svg{
+    transition: 0.3s ease;
+}
+
+.ric div:hover svg{
+    transform: rotate(20deg);
 }
